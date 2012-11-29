@@ -1,0 +1,18 @@
+{
+    'rssfeeds': [
+    {
+        'name': 'zone-h',
+        'feed': 'http://www.zone-h.org/rss/defacements',
+        'verify': 'true',
+        'field': 'title',
+        'interval': '20'
+    },
+    {
+        'name': 'phishtank',
+        'feed': 'http://rss.phishtank.com/rss/asn/?asn=XXXXX',
+        'verify': 'false',
+        'field': 'source',
+        'interval': '20'
+    }
+    ]
+}

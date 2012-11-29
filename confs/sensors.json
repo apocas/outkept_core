@@ -1,0 +1,48 @@
+{
+    'sensors': [
+    {
+        'name': 'load',
+        'alarm': '10',
+        'warning': '6',
+        'export': 'true',
+        'cmd': 'uptime | awk -F \'load average:\' \'{ print $2 }\' | awk -F \\, \'{ print $1 }\'',
+        'reactive': '',
+        'verifier': '',
+        'inverted': 'false',
+        'zero': 'false'
+    },
+    {
+        'name': 'exim',
+        'alarm': '600',
+        'warning': '500',
+        'export': 'true',
+        'cmd': 'exim -bpc',
+        'reactive': 'exim -bpru | grep -e \'<>\' | awk {\'print $3\'} | xargs exim -Mrm 2> /dev/null',
+        'verifier': 'if which exim >/dev/null; then\necho yes\nelse\necho no\nfi\n',
+        'inverted': 'false',
+        'zero': 'false'
+    },
+    {
+        'name': 'memory',
+        'alarm': '10',
+        'warning': '70',
+        'export': 'true',
+        'cmd': 'free -m | grep \'-\' | awk \'{print $4}\'',
+        'reactive': '',
+        'verifier': '',
+        'inverted': 'true',
+        'zero': 'false'
+    },
+    {
+        'name': 'tmp',
+        'alarm': '85',
+        'warning': '80',
+        'export': 'true',
+        'cmd': 'aux=$(df -h | grep /tmp | awk \'{print $5}\'); echo ${aux%\\%}',
+        'reactive': 'cd /tmp; rm -rf eaccelerator; rm -vf /tmp/cache_*; rm -vf /tmp/*.dat; rm -vf /tmp/categories_*; rm -vf /tmp/also_*; rm -vf /tmp/impat*; rm -vf /tmp/*.cache;',
+        'verifier': 'aux=$(df -h | grep /tmp | awk \'{ print $6 }\';); if [ -z "$aux" ]; then\necho no\nelse\necho yes\nfi\n',
+        'inverted': 'false',
+        'zero': 'false'
+    }
+    ]
+}

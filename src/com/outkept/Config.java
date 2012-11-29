@@ -80,7 +80,9 @@ public class Config {
                 Config.ignored_ips[i] = jo.getString("ip");
             }
         } catch (Exception ex) {
-            Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Configuration file missing (sensors.json, feed.json, config.json)");
+            System.exit(1);
         }
     }
 

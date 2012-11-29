@@ -27,6 +27,7 @@ public class Outkept {
     public static AddressDomain ipsDomain = null;
     private Bootloader boot;
     public static Notifier notifier;
+    private String pkey = System.getProperty("user.home") + File.separator + ".ssh/";
 
     public Outkept() {
         System.out.println("Outkept is booting...");
@@ -43,16 +44,19 @@ public class Outkept {
 
     private void initialize() {
         try {
-            jsch.addIdentity(System.getProperty("user.home") + File.separator + ".ssh/id_rsa", Config.password);
+            jsch.addIdentity(pkey + "id_rsa", Config.password);
         } catch (JSchException ex) {
-            Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Private key missing " + pkey + "id_rsa");
+            System.exit(1);
         }
 
         try {
-            Utils.secureDelete(System.getProperty("user.home") + File.separator + ".ssh/id_rsa");
-            Utils.secureDelete(System.getProperty("user.home") + File.separator + ".ssh/key");
+            Utils.secureDelete(pkey + "id_rsa");
         } catch (IOException ex) {
-            Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Private key missing " + pkey + "id_rsa");
+            System.exit(1);
         }
 
         Config.saveConfig();
@@ -67,11 +71,18 @@ public class Outkept {
 
     public static void main(String[] args) {
 
-        if (Config.password == null || Config.password.isEmpty()) {
+        while (Config.password == null || Config.password.isEmpty()) {
             try {
                 Config.password = Utils.readFile(System.getProperty("user.home") + File.separator + ".ssh/key").trim();
             } catch (IOException ex) {
-                Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Retrying to load password " + System.getProperty("user.home") + File.separator + ".ssh/key");
+
+                try {
+                    Thread.sleep(60000);
+                } catch (InterruptedException exx) {
+                    Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, exx);
+                }
             }
         }
 

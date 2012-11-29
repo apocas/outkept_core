@@ -1,0 +1,42 @@
+{
+    'redis': '192.168.80.80',
+    'web_user': 'user',
+    'web_password': 'password',
+    'mail_host': 'mail.domainxpto.com',
+    'mail_user': 'outkept@domainxpto.com',
+    'mail_password': 'passwordmail',
+    'mail_from': 'outkept@domainxpto.com',
+    'notification_mail': 'reports@domainxpto.com',
+    'twitter_enable': 'true',
+    'twitter_consumer_key': 'xxxxxxxxxxxxx',
+    'twitter_consumer_secret': 'xxxxxxxxxxxxxxxxx',
+    'twitter_access_token': 'xxxxxxxxxxxxxxxxxx',
+    'twitter_token_secret': 'xxxxxxxxxxxxxxxxxxxxxxxxx',
+    'sms_enable': 'false',
+    'sms_numbers': '',
+    'sms_host': 'sms.domainxpto.com',
+    'sms_user': 'sms',
+    'timeout': '10',
+    'alarm': '2',
+    'reactive': 'true',
+    'timer': '10000',
+    
+    'ignored_access_ips': [
+    {
+        'ip': '192.168.20.22'
+    },
+    {
+        'ip': '10.'
+    }
+    ],
+    
+    'crawler_user': 'root',
+    'ranges': [
+    {
+        'range': '192.168.1.0-192.168.10.254'
+    },
+    {
+        'range': '192.168.11.0-192.168.20.254'
+    }
+    ]
+}
