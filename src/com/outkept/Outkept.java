@@ -55,7 +55,7 @@ public class Outkept {
             Utils.secureDelete(pkey + "id_rsa");
         } catch (IOException ex) {
             //Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Private key missing " + pkey + "id_rsa");
+            System.out.println("Private key missing " + pkey + "id_rsa. Add a key to " + pkey + " and restart the service.");
             System.exit(1);
         }
 
@@ -76,8 +76,8 @@ public class Outkept {
                 Config.password = Utils.readFile(System.getProperty("user.home") + File.separator + ".ssh/key").trim();
             } catch (IOException ex) {
                 //Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("Retrying to load password " + System.getProperty("user.home") + File.separator + ".ssh/key");
-
+                System.out.println("Retrying to load key password from " + System.getProperty("user.home") + File.separator + ".ssh/key, add one line with the password. This file and key will be securely erased, they will have to be added each time the service is restarted.");
+                
                 try {
                     Thread.sleep(60000);
                 } catch (InterruptedException exx) {
