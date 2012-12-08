@@ -3,6 +3,7 @@ package com.outkept.servers;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.Session;
+import com.outkept.Config;
 import com.outkept.Outkept;
 import com.outkept.notifiers.Notifier;
 import com.outkept.sensors.Ip;
@@ -44,7 +45,7 @@ public class ServerLinux extends Server implements Runnable {
     @Override
     public void connect() throws Exception {
         try {
-            session = Outkept.jsch.getSession(username, address, 22);
+            session = Outkept.jsch.getSession(username, address, Config.port);
             java.util.Properties config = new java.util.Properties();
             config.put("StrictHostKeyChecking", "no");
             session.setConfig(config);

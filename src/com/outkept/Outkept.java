@@ -77,13 +77,19 @@ public class Outkept {
             } catch (IOException ex) {
                 //Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, ex);
                 System.out.println("Retrying to load key password from " + System.getProperty("user.home") + File.separator + ".ssh/key, add one line with the password. This file and key will be securely erased, they will have to be added each time the service is restarted.");
-                
+
                 try {
                     Thread.sleep(60000);
                 } catch (InterruptedException exx) {
                     Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, exx);
                 }
             }
+        }
+
+        try {
+            Utils.secureDelete(System.getProperty("user.home") + File.separator + ".ssh/key");
+        } catch (IOException ex) {
+            System.exit(1);
         }
 
         new Outkept();

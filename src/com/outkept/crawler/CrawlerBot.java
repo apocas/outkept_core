@@ -42,12 +42,12 @@ public class CrawlerBot {
 
     public boolean connect() {
         try {
-            SocketAddress sockaddr = new InetSocketAddress(address, 22);
+            SocketAddress sockaddr = new InetSocketAddress(address, Config.port);
             Socket socket = new Socket();
             socket.connect(sockaddr, 2000);
             socket.close();
 
-            session = Outkept.jsch.getSession(Config.crawler_user, address, 22);
+            session = Outkept.jsch.getSession(Config.crawler_user, address, Config.port);
             java.util.Properties config = new java.util.Properties();
             config.put("StrictHostKeyChecking", "no");
             session.setConfig(config);

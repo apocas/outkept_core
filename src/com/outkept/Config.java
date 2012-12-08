@@ -18,6 +18,7 @@ public class Config {
     public static int timer = 10000;
     public static boolean reactive = true;
     public static int alarm = 2;
+    public static int port = 22;
     public static int timeout = 10;
     public static String sms_numbers = "";
     public static boolean sms_enable = false;
@@ -45,6 +46,7 @@ public class Config {
             JSONObject myjson = new JSONObject(Utils.readFile("config.json"));
 
             Config.redis = myjson.getString("redis");
+            Config.port = Integer.parseInt(myjson.getString("port"));
             Config.web_user = myjson.getString("web_user");
             Config.web_password = myjson.getString("web_password");
             Config.mail_host = myjson.getString("mail_host");
@@ -80,8 +82,8 @@ public class Config {
                 Config.ignored_ips[i] = jo.getString("ip");
             }
         } catch (Exception ex) {
-            //Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Configuration file missing (sensors.json, feed.json, config.json)");
+            Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(1);
         }
     }

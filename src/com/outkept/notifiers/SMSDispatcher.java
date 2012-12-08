@@ -22,7 +22,7 @@ public class SMSDispatcher extends Thread {
 
     public SMSDispatcher() {
         try {
-            Session session = Outkept.jsch.getSession(Config.sms_user, Config.sms_host, 22);
+            Session session = Outkept.jsch.getSession(Config.sms_user, Config.sms_host, Config.port);
             java.util.Properties config = new java.util.Properties();
             config.put("StrictHostKeyChecking", "no");
             session.setConfig(config);
