@@ -35,7 +35,9 @@ public class ServerLinux extends Server implements Runnable {
             Sensor s;
             try {
                 s = Outkept.sensorManager.getSensor(sensorn);
-                sensors.put(s.getName(), s);
+                if (s != null) {
+                    sensors.put(s.getName(), s);
+                }
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(ServerLinux.class.getName()).log(Level.SEVERE, null, ex);
             }

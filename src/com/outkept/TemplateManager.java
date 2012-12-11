@@ -50,6 +50,10 @@ public class TemplateManager {
     }
 
     public LoadedSensor getSensor(String name) throws CloneNotSupportedException {
-        return (LoadedSensor) sensors.get(name).clone();
+        if (sensors.get(name) != null) {
+            return (LoadedSensor) sensors.get(name).clone();
+        } else {
+            return null;
+        }
     }
 }
