@@ -1,8 +1,6 @@
 package com.outkept.feeds;
 
 import com.outkept.utils.Utils;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import twitter4j.internal.org.json.JSONArray;
 import twitter4j.internal.org.json.JSONObject;
 
@@ -26,7 +24,7 @@ public class FeedLoader {
                 rs.start();
             }
         } catch (Exception ex) {
-            Logger.getLogger(FeedLoader.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Feeds file missing (feeds.json) or with errors. Feeds are disabled");
         }
     }
 }

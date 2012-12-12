@@ -38,6 +38,10 @@ public class Crawler extends Thread {
             }
 
             if (exists == null) {
+                if (Config.debug) {
+                    System.out.println("Crawler trying " + address);
+                }
+
                 CrawlerBot lc = new CrawlerBot(address);
                 if (lc.connect()) {
                     conn = Outkept.redis.getResource();
@@ -46,6 +50,10 @@ public class Crawler extends Thread {
                         if (conn.hget("macs", lc.getID().toUpperCase()) == null) {
 
                             conn.hset("macs", lc.getID().toUpperCase(), address);
+
+                            if (Config.debug) {
+                                System.out.println("Crawler looking for sensors in " + address);
+                            }
 
                             conn.hset(address, "sensors", lc.checkSensors());
 

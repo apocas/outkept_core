@@ -37,7 +37,7 @@ public class Statistics extends Thread {
                     sessions += (Integer) s.getServer().getSensors().get("users").getValue();
 
                     for (Sensor sensor : sensors) {
-                        if (sensor.getValue() != null && !"lastip".equals(sensor.getName()) && !"users".equals(sensor.getName())) {
+                        if (sensor.getValue() != null && !"lastip".equals(sensor.getName()) && !"users".equals(sensor.getName()) && !sensor.isInverted()) {
                             Double d = averages.get(sensor.name);
                             if (d == null) {
                                 averages.put(sensor.name, (Double) sensor.getValue());

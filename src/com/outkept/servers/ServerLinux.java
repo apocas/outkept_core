@@ -5,6 +5,7 @@ import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.Session;
 import com.outkept.Config;
 import com.outkept.Outkept;
+import com.outkept.crawler.CrawlerBot;
 import com.outkept.notifiers.Notifier;
 import com.outkept.sensors.Ip;
 import com.outkept.sensors.Sensor;
@@ -31,6 +32,12 @@ public class ServerLinux extends Server implements Runnable {
         sensors.put("users", new Users());
         sensors.put("lastip", new Ip());
 
+        if (!Config.recheck_sensors) {
+            this.loadSensors(senss);
+        }
+    }
+
+    private void loadSensors(String[] senss) {
         for (String sensorn : senss) {
             Sensor s;
             try {
@@ -74,6 +81,28 @@ public class ServerLinux extends Server implements Runnable {
             out.flush();
             hostname = input.readLine().trim();
 
+            if (Config.recheck_sensors) {
+                String aux = "";
+                try {
+                    aux = CrawlerBot.checkSensors(out, input);
+                } catch (Exception ex) {
+                    Logger.getLogger(ServerLinux.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                if (aux != null && !aux.isEmpty()) {
+                    String[] senss = aux.split(",");
+                    Jedis connr = Outkept.redis.getResource();
+                    try {
+                        connr.hset(this.name, "sensors", aux);
+                    } catch (JedisException e) {
+                        System.out.println("Jedis fail.");
+                        Outkept.redis.returnBrokenResource(connr);
+                    } finally {
+                        Outkept.redis.returnResource(connr);
+                    }
+
+                    this.loadSensors(senss);
+                }
+            }
 
             int caux = isAdaptec();
             if (caux != 0) {

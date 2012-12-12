@@ -46,16 +46,13 @@ public class Outkept {
         try {
             jsch.addIdentity(pkey + "id_rsa", Config.password);
         } catch (JSchException ex) {
-            //Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Private key missing " + pkey + "id_rsa");
-            System.exit(1);
+            System.out.println("Error while loading private key " + pkey + "id_rsa");
         }
 
         try {
             Utils.secureDelete(pkey + "id_rsa");
         } catch (IOException ex) {
-            //Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Private key missing " + pkey + "id_rsa. Add a key to " + pkey + " and restart the service.");
+            System.out.println("Private key missing " + pkey + "id_rsa. Add a key and restart the service.");
             System.exit(1);
         }
 
@@ -70,26 +67,21 @@ public class Outkept {
     }
 
     public static void main(String[] args) {
-
+        System.out.println("Outkept v1.1 - http://outke.pt\n##############");
         while (Config.password == null || Config.password.isEmpty()) {
             try {
                 Config.password = Utils.readFile(System.getProperty("user.home") + File.separator + ".ssh/key").trim();
+                Utils.secureDelete(System.getProperty("user.home") + File.separator + ".ssh/key");
             } catch (IOException ex) {
-                //Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("Retrying to load key password from " + System.getProperty("user.home") + File.separator + ".ssh/key, add one line with the password. This file and key will be securely erased, they will have to be added each time the service is restarted.");
+                System.out.println("Will retry to load key's passphrase from " + System.getProperty("user.home") + File.separator + ".ssh/key in 30 seconds.");
+                System.out.println("Fill the file's first line with the passphrase..");
 
                 try {
-                    Thread.sleep(60000);
+                    Thread.sleep(30000);
                 } catch (InterruptedException exx) {
                     Logger.getLogger(Outkept.class.getName()).log(Level.SEVERE, null, exx);
                 }
             }
-        }
-
-        try {
-            Utils.secureDelete(System.getProperty("user.home") + File.separator + ".ssh/key");
-        } catch (IOException ex) {
-            System.exit(1);
         }
 
         new Outkept();

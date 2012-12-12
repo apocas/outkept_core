@@ -22,7 +22,7 @@ public class Config {
     public static int timeout = 10;
     public static String sms_numbers = "";
     public static boolean sms_enable = false;
-    public static boolean twitter_enable = true;
+    public static boolean twitter_enable = false;
     public static String twitter_consumer_key = "";
     public static String twitter_consumer_secret = "";
     public static String twitter_access_token = "";
@@ -40,6 +40,7 @@ public class Config {
     public static String mail_from;
     public static String[] ignored_ips;
     public static String notification_mail;
+    public static boolean recheck_sensors = true;
 
     public static void loadConfig() {
         try {
@@ -55,19 +56,25 @@ public class Config {
             Config.mail_from = myjson.getString("mail_from");
             Config.notification_mail = myjson.getString("notification_mail");
             Config.twitter_enable = Boolean.parseBoolean(myjson.getString("twitter_enable"));
-            Config.twitter_consumer_key = myjson.getString("twitter_consumer_key");
-            Config.twitter_consumer_secret = myjson.getString("twitter_consumer_secret");
-            Config.twitter_access_token = myjson.getString("twitter_access_token");
-            Config.twitter_token_secret = myjson.getString("twitter_token_secret");
+            if (Config.twitter_enable) {
+                Config.twitter_consumer_key = myjson.getString("twitter_consumer_key");
+                Config.twitter_consumer_secret = myjson.getString("twitter_consumer_secret");
+                Config.twitter_access_token = myjson.getString("twitter_access_token");
+                Config.twitter_token_secret = myjson.getString("twitter_token_secret");
+            }
             Config.sms_enable = Boolean.parseBoolean(myjson.getString("sms_enable"));
-            Config.sms_numbers = myjson.getString("sms_numbers");
-            Config.sms_host = myjson.getString("sms_host");
-            Config.sms_user = myjson.getString("sms_user");
+            if (Config.sms_enable) {
+                Config.sms_numbers = myjson.getString("sms_numbers");
+                Config.sms_host = myjson.getString("sms_host");
+                Config.sms_user = myjson.getString("sms_user");
+            }
             Config.timeout = Integer.parseInt(myjson.getString("timeout"));
             Config.alarm = Integer.parseInt(myjson.getString("alarm"));
             Config.reactive = Boolean.parseBoolean(myjson.getString("reactive"));
             Config.timer = Integer.parseInt(myjson.getString("timer"));
             Config.crawler_user = myjson.getString("crawler_user");
+            Config.debug = Boolean.parseBoolean(myjson.getString("debug"));
+            Config.recheck_sensors = Boolean.parseBoolean(myjson.getString("recheck_sensors"));
 
             JSONArray the_json_array = myjson.getJSONArray("ranges");
             for (int i = 0; i < the_json_array.length(); i++) {
@@ -82,7 +89,7 @@ public class Config {
                 Config.ignored_ips[i] = jo.getString("ip");
             }
         } catch (Exception ex) {
-            System.out.println("Configuration file missing (sensors.json, feed.json, config.json)");
+            System.out.println("Configuration file missing (config.json) or with errors. Next message will give you a hint about the problematic variable.");
             Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(1);
         }

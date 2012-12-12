@@ -6,8 +6,6 @@ package com.outkept.sensors;
  */
 public class LoadedSensor extends Sensor implements Cloneable {
 
-    public boolean inverted = false;
-
     public LoadedSensor(String name, String cmd, String reactive, String verifier, Object alarmValue, Object warningValue, boolean export, boolean inverted, boolean zero) {
         this.name = name;
         this.cmd = cmd;

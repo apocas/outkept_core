@@ -104,6 +104,10 @@ public class CrawlerBot {
     }
 
     public String checkSensors() throws IOException, CloneNotSupportedException {
+        return CrawlerBot.checkSensors(out, input);
+    }
+
+    public static String checkSensors(OutputStream out, BufferedReader input) throws IOException, CloneNotSupportedException {
         String senss = "";
         for (Object sensor : Outkept.sensorManager.getTemplates()) {
             LoadedSensor s = (LoadedSensor) sensor;

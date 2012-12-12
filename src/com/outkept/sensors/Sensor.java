@@ -17,6 +17,7 @@ public abstract class Sensor {
     public boolean fired = false;
     public boolean twitter = true;
     public boolean zero = false;
+    public boolean inverted = false;
 
     public abstract boolean isAlarmed();
 
@@ -106,13 +107,17 @@ public abstract class Sensor {
     }
 
     public boolean isExport() {
-        return export;
+        return this.export;
     }
 
     /**
      * @return the twitter
      */
     public boolean isTwitter() {
-        return twitter;
+        return this.twitter;
+    }
+
+    public boolean isInverted() {
+        return this.inverted;
     }
 }
