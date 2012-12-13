@@ -41,6 +41,7 @@ public class Config {
     public static String[] ignored_ips;
     public static String notification_mail;
     public static boolean recheck_sensors = true;
+    public static String version = "";
 
     public static void loadConfig() {
         try {
@@ -99,6 +100,7 @@ public class Config {
         Jedis connr = Outkept.redis.getResource();
 
         try {
+            connr.hset("config", "version", Config.version);
             connr.hset("config", "web_user", Config.web_user);
             connr.hset("config", "web_password", Config.web_password);
         } catch (JedisException e) {

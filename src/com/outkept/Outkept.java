@@ -67,7 +67,8 @@ public class Outkept {
     }
 
     public static void main(String[] args) {
-        System.out.println("Outkept v1.1 - http://outke.pt\n##############");
+        Config.version = "1.1";
+        System.out.println("Outkept v" + Config.version + " - http://outke.pt\n##############");
         while (Config.password == null || Config.password.isEmpty()) {
             try {
                 Config.password = Utils.readFile(System.getProperty("user.home") + File.separator + ".ssh/key").trim();
