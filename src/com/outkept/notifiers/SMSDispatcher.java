@@ -25,6 +25,7 @@ public class SMSDispatcher extends Thread {
             Session session = Outkept.jsch.getSession(Config.sms_user, Config.sms_host, Config.port);
             java.util.Properties config = new java.util.Properties();
             config.put("StrictHostKeyChecking", "no");
+            config.put("PreferredAuthentications", "publickey");
             session.setConfig(config);
             session.connect();
 

@@ -33,6 +33,7 @@ public abstract class Server {
     protected boolean loaded = false;
     protected String hash;
     protected long lastupdated;
+    private boolean notified = false;
 
     public Server(String address, String username, String name, boolean react, boolean sms) {
         this.address = address;
@@ -227,5 +228,13 @@ public abstract class Server {
 
     public void setHash(String key) {
         hash = key;
+    }
+
+    public boolean notified() {
+        return this.notified;
+    }
+
+    public void notifyO() {
+        this.notified = true;
     }
 }

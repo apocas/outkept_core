@@ -50,7 +50,9 @@ public class CrawlerBot {
             session = Outkept.jsch.getSession(Config.crawler_user, address, Config.port);
             java.util.Properties config = new java.util.Properties();
             config.put("StrictHostKeyChecking", "no");
+            config.put("PreferredAuthentications","publickey");
             session.setConfig(config);
+            
             session.connect();
 
             channel = session.openChannel("shell");

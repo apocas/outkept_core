@@ -37,15 +37,19 @@ public class Gardener extends Thread {
                     long now = System.currentTimeMillis() / 1000;
 
                     if (now - s.getServer().getLastUpdated() > 60) {
-                        s.getServer().setRetries(s.getServer().getRetries() + 1);
-
-                        if (s.getServer().getRetries() == 3) {
+                        if (now - s.getServer().getLastUpdated() > 120 && !s.getServer().notified()) {
                             if (Config.sms_enable && s.getServer().hasSMS()) {
                                 Outkept.notifier.notify(Notifier.SMS, s.getServer().getHostname() + "(" + s.getServer().getAddress() + ")" + " offline!");
                             }
 
                             Outkept.notifier.notify(Notifier.TWITTER, s.getServer().getHostname() + "(" + s.getServer().getAddress() + ")" + " OFFLINE!");
 
+                            s.getServer().notifyO();
+                        }
+
+                        s.getServer().setRetries(s.getServer().getRetries() + 1);
+
+                        if (s.getServer().getRetries() == 3) {
                             Jedis conn = Outkept.redis.getResource();
                             try {
                                 conn.hset(s.getServer().getName(), "status", "3");
