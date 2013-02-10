@@ -30,6 +30,9 @@ public class Config {
     public static String crawler_user = "";
     public static boolean debug = true;
     public static String redis;
+    public static boolean statsd = false;
+    public static String statsdh;
+    public static int statsdp;
     public static String web_user;
     public static String web_password;
     public static String sms_host;
@@ -56,6 +59,11 @@ public class Config {
             Config.mail_password = myjson.getString("mail_password");
             Config.mail_from = myjson.getString("mail_from");
             Config.notification_mail = myjson.getString("notification_mail");
+            Config.statsd = Boolean.parseBoolean(myjson.getString("statsd_enable"));
+            if (Config.statsd) {
+                Config.statsdh = myjson.getString("statsd_host");
+                Config.statsdp = Integer.parseInt(myjson.getString("statsd_port"));
+            }
             Config.twitter_enable = Boolean.parseBoolean(myjson.getString("twitter_enable"));
             if (Config.twitter_enable) {
                 Config.twitter_consumer_key = myjson.getString("twitter_consumer_key");

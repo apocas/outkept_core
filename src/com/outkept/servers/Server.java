@@ -20,7 +20,6 @@ public abstract class Server {
     protected BufferedReader input;
     protected boolean connected = false;
     protected OutputStream out;
-    protected int retries = 0;
     protected boolean alarm_triggered = false;
     protected String name = "";
     protected ServerMonitor sgui = null;
@@ -104,6 +103,8 @@ public abstract class Server {
         for (Sensor sensor : sensors.values()) {
             if (sensor.isAlarmed() && connected && !sensor.isFired()) {
                 Jedis conn = Outkept.redis.getResource();
+                
+                Outkept.statsd.increment("outkept.reactives");
 
                 try {
                     Transaction t = conn.multi();
@@ -113,6 +114,7 @@ public abstract class Server {
                     t.exec();
                 } catch (JedisException ex) {
                     System.out.println("Jedis fail.");
+                    ex.printStackTrace();
                     Outkept.redis.returnBrokenResource(conn);
                 } finally {
                     Outkept.redis.returnResource(conn);
@@ -169,20 +171,6 @@ public abstract class Server {
     }
 
     public abstract void updateFields() throws IOException;
-
-    /**
-     * @return the retries
-     */
-    public int getRetries() {
-        return retries;
-    }
-
-    /**
-     * @param retries the retries to set
-     */
-    public void setRetries(int retries) {
-        this.retries = retries;
-    }
 
     /**
      * @return the sgui

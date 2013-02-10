@@ -236,6 +236,9 @@ public class ServerLinux extends Server implements Runnable {
                     if (!globalRun(line)) {
                         for (Sensor sensor : sensors.values()) {
                             if (sensor.loadValue(line)) {
+
+                                Outkept.statsd.increment("outkept.updates");
+
                                 Jedis connr = Outkept.redis.getResource();
                                 try {
                                     connr.hset(this.name, sensor.getName(), sensor.getValue().toString());
@@ -243,6 +246,7 @@ public class ServerLinux extends Server implements Runnable {
                                     connr.hset(this.name, "lastupdated", this.lastupdated + "");
                                 } catch (JedisException e) {
                                     System.out.println("Jedis fail.");
+                                    Outkept.statsd.increment("outkept.fails");
                                     Outkept.redis.returnBrokenResource(connr);
                                 } finally {
                                     Outkept.redis.returnResource(connr);

@@ -44,12 +44,6 @@ public class Gardener extends Thread {
 
                             Outkept.notifier.notify(Notifier.TWITTER, s.getServer().getHostname() + "(" + s.getServer().getAddress() + ")" + " OFFLINE!");
 
-                            s.getServer().notifyO();
-                        }
-
-                        s.getServer().setRetries(s.getServer().getRetries() + 1);
-
-                        if (s.getServer().getRetries() == 3) {
                             Jedis conn = Outkept.redis.getResource();
                             try {
                                 conn.hset(s.getServer().getName(), "status", "3");
@@ -60,6 +54,8 @@ public class Gardener extends Thread {
                             } finally {
                                 Outkept.redis.returnResource(conn);
                             }
+
+                            s.getServer().notifyO();
                         }
 
                         s.getServer().disconnect();

@@ -6,8 +6,10 @@ import com.outkept.network.AddressDomain;
 import com.outkept.notifiers.Notifier;
 import com.outkept.servers.ServerMonitor;
 import com.outkept.utils.Utils;
+import com.outkept.vendor.StatsdClient;
 import java.io.File;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +24,7 @@ public class Outkept {
 
     public static ConcurrentHashMap<String, ServerMonitor> servers = new ConcurrentHashMap<String, ServerMonitor>();
     public static JedisPool redis = null;
+    public static StatsdClient statsd = null;
     public static JSch jsch = null;
     public static TemplateManager sensorManager = null;
     public static AddressDomain ipsDomain = null;
@@ -34,6 +37,13 @@ public class Outkept {
 
         ipsDomain = new AddressDomain();
         Config.loadConfig();
+
+        if (Config.statsd) {
+            try {
+                statsd = new StatsdClient(Config.statsdh, Config.statsdp);
+            } catch (Exception ex) {
+            }
+        }
 
         redis = new JedisPool(new JedisPoolConfig(), Config.redis);
         jsch = new JSch();

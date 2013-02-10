@@ -80,14 +80,13 @@ public class Refresher extends Thread {
                 if (aux != null && (now - Long.parseLong(aux)) > 43200) {
                     System.out.println("Removing " + sg.getServer().getAddress());
 
-                    Transaction t = conn.multi();
+                    conn.zadd("log", System.currentTimeMillis() / 1000, "{\"address\":\"" + sg.getServer().getAddress() + "\", \"message\":\"" + sg.getServer().getAddress() + " removed after being offline\"}");
+                    conn.del(sg.getServer().getAddress());
+                    conn.del(sg.getServer().getAddress() + ";reactives");
+                    conn.hdel("macs", sg.getServer().getHash());
 
-                    t.zadd("log", System.currentTimeMillis() / 1000, "{\"address\":\"" + sg.getServer().getAddress() + "\", \"message\":\"" + sg.getServer().getAddress() + " removed after being offline\"}");
-                    t.del(sg.getServer().getAddress());
-                    t.del(sg.getServer().getAddress() + ";reactives");
-                    t.hdel("macs", sg.getServer().getHash());
+                    conn.publish("outkeptc", "reboot");
 
-                    t.exec();
                     it.remove();
 
                     sg.getServer().disconnect();
@@ -96,6 +95,7 @@ public class Refresher extends Thread {
                 }
             } catch (JedisException ex) {
                 System.out.println("Jedis fail.");
+                ex.printStackTrace();
                 Outkept.redis.returnBrokenResource(conn);
             } finally {
                 Outkept.redis.returnResource(conn);
